@@ -8,6 +8,8 @@ int main(){
 	int pil;
 	bool cond;
 	cond = true;
+	string data1[2];
+	int data2[2];
 	
 	while(cond){
 		system("cls");
@@ -29,10 +31,23 @@ int main(){
 				break;
 			}
 			case 2 : {
-				string a = x.ambildepan();
-				cout << a;
-				getch();
+				string nama;
+				string klm;
+				int id;
+				int prioritas;
+				int usia;
+				cout<<"antrian baru" <<endl;
+				for(int i = 0; i < 2; i++) {
+					nama = x.ambilnama();
+					klm = x.ambilklm();
+					id = x.ambilid();
+					prioritas = x.ambilpriority();
+					usia = x.ambilusia();
+					
+					x.deQueue();
+				}
 				
+				getch();
 				break;
 			}
 			case 3 : {

@@ -27,6 +27,7 @@ class UGD{
 		void inputFile();
 		void input(pasien *, pasien *);
 		void cetak();
+		void enqueue(int prioritas, int usia, int nafas, int jantung, int darah);
 		
 		string ambilnama();
 		string ambilklm();
@@ -78,6 +79,8 @@ void UGD::deQueue(pasien *root){
 }
 
 void UGD::deQueue(){
+	string nama = front->nama;
+	cout << "pasien bernama "<< nama << endl;
 	pasien *hapus = front;
 	
 	front = front->next;
@@ -253,6 +256,23 @@ void UGD::inputManual() {
 	}
 	else{
 		cout<<"Antrian Data Penuh";
+	}
+}
+
+void UGD::enqueue(int prioritas, int usia, int nafas, int jantung, int darah) {
+
+	pasien *newNode = new pasien();
+	
+	if(!isFull()){
+		// hasil decision disimpan di prioritas untuk dibandingkan
+		newNode->cond[0] = nafas;
+		newNode->cond[1] = jantung;
+		newNode->cond[2] = darah;		
+		newNode->priority = prioritas;
+		
+		system("cls");
+		cout<<" Prioritas Pasien Adalah : "<<newNode->priority<<endl;;
+		
 	}
 }
 
