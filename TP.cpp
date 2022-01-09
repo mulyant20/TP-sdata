@@ -1,15 +1,14 @@
 #include<iostream>
-
 #include "pasien.h"
 using namespace std;
 
 int main(){
 	UGD x;
-	int pil;
+
+	int pil,
+		cariPasien;
 	bool cond;
 	cond = true;
-	string data1[2];
-	int data2[2];
 	
 	while(cond){
 		system("cls");
@@ -27,31 +26,34 @@ int main(){
 		cin>>pil;
 		switch(pil){
 			case 1 : {
-				x.inputManual();
+				system("cls");
+				cout<<"=========================="<<endl;
+				cout<<"        Pilihan Cetak"<<endl;
+				cout<<"=========================="<<endl;
+				cout<<" 1. input manual"<<endl;
+				cout<<" 2. input file"<<endl;
+				cout<<"=========================="<<endl;
+				cout<<" Masukkan Pilihan : ";
+				cin>>pil;
+				switch(pil) {
+					case 1 :
+						x.inputManual();
+						break;
+					case 2 :
+						x.inputFile();
+						break;
+					default :
+						break;
+				}
 				break;
 			}
 			case 2 : {
-				string nama;
-				string klm;
-				int id;
-				int prioritas;
-				int usia;
-				cout<<"antrian baru" <<endl;
-				for(int i = 0; i < 2; i++) {
-					nama = x.ambilnama();
-					klm = x.ambilklm();
-					id = x.ambilid();
-					prioritas = x.ambilpriority();
-					usia = x.ambilusia();
-					
-					x.deQueue();
-				}
-				
-				getch();
+				cout << "cari id pasien ";cin>>cariPasien;
+				x.cari(cariPasien);
 				break;
 			}
 			case 3 : {
-				do{
+				do {
 					system("cls");
 					cout<<"=========================="<<endl;
 					cout<<"        Pilihan Cetak"<<endl;
