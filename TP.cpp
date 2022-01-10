@@ -1,14 +1,15 @@
 #include<iostream>
+
 #include "pasien.h"
 using namespace std;
 
 int main(){
 	UGD x;
 
-	int pil,
-		cariPasien;
+	int pil;
 	bool cond;
 	cond = true;
+	x.inputFile();
 	
 	while(cond){
 		system("cls");
@@ -26,34 +27,23 @@ int main(){
 		cin>>pil;
 		switch(pil){
 			case 1 : {
-				system("cls");
-				cout<<"=========================="<<endl;
-				cout<<"        Pilihan Cetak"<<endl;
-				cout<<"=========================="<<endl;
-				cout<<" 1. input manual"<<endl;
-				cout<<" 2. input file"<<endl;
-				cout<<"=========================="<<endl;
-				cout<<" Masukkan Pilihan : ";
-				cin>>pil;
-				switch(pil) {
-					case 1 :
-						x.inputManual();
-						break;
-					case 2 :
-						x.inputFile();
-						break;
-					default :
-						break;
-				}
+				x.inputManual();
 				break;
 			}
 			case 2 : {
-				cout << "cari id pasien ";cin>>cariPasien;
-				x.cari(cariPasien);
+				int search;
+				system("cls");
+				cout<<"=========================="<<endl;
+				cout<<"     Pencarian Pasien"<<endl;
+				cout<<"=========================="<<endl;
+				cout<<" Masukkan ID Pasien : ";
+				cin>>search;
+				x.cari(search);
+				getch();
 				break;
 			}
 			case 3 : {
-				do {
+				do{
 					system("cls");
 					cout<<"=========================="<<endl;
 					cout<<"        Pilihan Cetak"<<endl;
@@ -72,28 +62,29 @@ int main(){
 					}
 					else if(pil > 1 && pil <= 5){
 						x.pisah();
+						x.cetak(pil);
 						break;
-					}
-					else{
-						
 					}
 				}while(1);
 				break;
 			}
 			case 4 : {
-				
+				x.deQueue();
 				break;
 			}
 			case 5 : {
-				
+				int search;
+				system("cls");
+				cout<<"=========================="<<endl;
+				cout<<"     Pencarian Pasien"<<endl;
+				cout<<"=========================="<<endl;
+				cout<<" Masukkan ID Pasien : ";
+				cin>>search;
+				x.rujuk(search);
 				break;
 			}
-			case 6 : {
+			case 6 : {	
 				cond = false;
-				break;
-			}
-			default : {
-				
 				break;
 			}
 		}

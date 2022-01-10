@@ -14,7 +14,7 @@ struct pasien{
 class UGD{
 	public :
 		UGD();
-		bool isFull();
+		bool isFull(int , int);
 		
 		int decision(int, int, int);
 		int pernapasan();
@@ -22,6 +22,8 @@ class UGD{
 		int tekananDarah();
 		
 		void deQueueCadangan();
+		void deQueueCadangan(int );
+		void deQueueWarna(int , int);
 		void deQueue();
 		void pisah();
 		void inputManual();
@@ -33,19 +35,20 @@ class UGD{
 		void backUpAntrian(pasien *);
 		void cetak();
 		void cetak(int );
-		void cari(int A);
+		void cari(int );
+		void rujuk(int );
 		
 	private :
 		int maks, length, no;
 		int lengthMerah, lengthKuning, lengthHijau, lengthHitam;
 		int maksMerah, maksKuning, maksHijau, maksHitam;
 		pasien *front;
-		pasien *rear;
+		pasien *rear, *rearCadangan;
 		pasien *merah, *kuning, *hijau, *hitam, *cadangan;
 };
 
 UGD::UGD(){
-	front = NULL;
+	front = rear = rearCadangan = NULL;
 	merah = kuning = hijau = hitam = cadangan = NULL;
 	maks = 8;
 	length = lengthMerah= lengthKuning= lengthHijau= lengthHitam= 0;
@@ -54,6 +57,204 @@ UGD::UGD(){
 	maksHijau = 5; 
 	maksHitam = 3;
 	no = 1;
+}
+
+void UGD::cari(int A) {
+	pasien *print = cadangan;
+	while(print != NULL) {
+		if(print->id == A) {
+			cout<<"=========================="<<endl;
+			cout<<"Prioritas        : "<<print->priority<<endl;
+			cout<<"ID Pasien        : "<<print->id<<endl;
+			cout<<"Nama             : "<<print->nama<<endl;
+			cout<<"Jenis Kelamin    : "<<print->jenis_klm<<endl;
+			cout<<"Usia             : "<<print->usia<<endl;
+			cout<<"Golongan Darah   : "<<print->gol_dar<<endl;
+			cout<<"Riwayat Penyakit : "<<print->riwayat<<endl;
+			break;
+		}
+		else if(print->next == NULL){
+			cout<<"Pasien Tidak Ditemukan ";
+		}
+		print = print->next;
+	}
+}
+
+void UGD::rujuk(int x){
+	pasien *print = cadangan;
+	while(print != NULL){
+		if(print->id == x) {
+			cout<<"=========================="<<endl;
+			cout<<"Prioritas        : "<<print->priority<<endl;
+			cout<<"ID Pasien        : "<<print->id<<endl;
+			cout<<"Nama             : "<<print->nama<<endl;
+			cout<<"Jenis Kelamin    : "<<print->jenis_klm<<endl;
+			cout<<"Usia             : "<<print->usia<<endl;
+			cout<<"Golongan Darah   : "<<print->gol_dar<<endl;
+			cout<<"Riwayat Penyakit : "<<print->riwayat<<endl;
+			
+			deQueueCadangan(print->id);
+			deQueueWarna(print->priority, print->id);
+			break;
+		}
+		else if(print->next == NULL){
+			cout<<"Pasien Tidak Ditemukan ";
+		}
+		print = print->next;
+	}
+	getch();
+}
+
+void UGD::deQueueWarna(int prioritas, int x){
+	pasien *back = new pasien();
+	
+	if(prioritas == 1){
+		pasien *print = merah;
+		
+		while (print != NULL){
+			if(print->id == x){
+				pasien *hapus = print;
+				
+				if(print == merah){
+					merah = merah->next;
+				}
+				else if(print->next == NULL){
+					back->next = NULL;
+				}
+				else{
+					back->next = print->next;
+				}
+				
+				lengthMerah--;				
+				delete hapus;
+				break;
+			}		
+			
+			if(print->next != NULL && print->next->id == x){
+				back = print;
+			}
+			print = print->next;
+		}
+	}
+	else if(prioritas == 2){
+		pasien *print = kuning;
+		
+		while (print != NULL){
+			if(print->id == x){
+				pasien *hapus = print;
+				
+				if(print == kuning){
+					kuning = kuning->next;
+				}
+				else if(print->next == NULL){
+					back->next = NULL;
+				}
+				else{
+					back->next = print->next;
+				}
+				
+				lengthKuning--;
+				delete hapus;
+				break;
+			}		
+			
+			if(print->next != NULL && print->next->id == x){
+				back = print;
+			}
+			print = print->next;
+		}
+	}
+	else if(prioritas == 3){
+		pasien *print = hijau;
+		
+		while (print != NULL){
+			if(print->id == x){
+				pasien *hapus = print;
+				
+				if(print == hijau){
+					hijau = hijau->next;
+				}
+				else if(print->next == NULL){
+					back->next = NULL;
+				}
+				else{
+					back->next = print->next;
+				}
+				
+				lengthHijau--;
+				delete hapus;
+				break;
+			}		
+			
+			if(print->next != NULL && print->next->id == x){
+				back = print;
+			}
+			print = print->next;
+		}
+	}
+	else if(prioritas == 4){
+		pasien *print = hitam;
+		
+		while (print != NULL){
+			if(print->id == x){
+				pasien *hapus = hitam;
+				
+				if(print == hitam){
+					hitam = hitam->next;
+				}
+				else if(print->next == NULL){
+					back->next = NULL;
+				}
+				else{
+					back->next = print->next;
+				}
+				
+				lengthHitam--;
+				delete hapus;
+				break;
+			}		
+			
+			if(print->next != NULL && print->next->id == x){
+				back = print;
+			}
+			print = print->next;
+		}
+	}	
+}
+
+void UGD::deQueueCadangan(int x){
+	pasien *print = cadangan;
+	pasien *back = new pasien();
+	while (print != NULL){
+		if(print->id == x){
+			pasien *hapus = print;
+			
+			if(print == cadangan){
+				cadangan = cadangan->next;
+			}
+			else if(print->next == NULL){
+				back->next = NULL;
+			}
+			else{
+				back->next = print->next;
+			}
+			
+			delete hapus;
+			break;
+		}		
+		
+		if(print->next != NULL && print->next->id == x){
+			back = print;
+		}
+		print = print->next;
+	}
+}
+
+void UGD::deQueueCadangan(){
+	pasien *hapus = cadangan;
+	
+	cadangan = cadangan->next;
+	delete hapus;
 }
 
 void UGD::deQueue(){
@@ -77,21 +278,25 @@ void UGD::deQueue(){
 		pasien *hapus = new pasien();
 		
 		if(cadangan->priority == 1){
+			lengthMerah--;
 			hapus = merah;
 			merah = merah->next;
 			delete hapus;
 		}
 		else if(cadangan->priority == 2){
+			lengthKuning--;
 			hapus = kuning;
 			kuning = kuning->next;
 			delete hapus;
 		}
 		else if(cadangan->priority == 3){
+			lengthHijau--;
 			hapus = hijau;
 			hijau = hijau->next;
 			delete hapus;
 		}
 		else if(cadangan->priority == 4){
+			lengthHitam--;
 			hapus = hitam;
 			hitam = hitam->next;
 			delete hapus;
@@ -100,42 +305,8 @@ void UGD::deQueue(){
 	}
 }
 
-void UGD::cari(int A) {
-	pasien *print = cadangan;
-	
-	system("cls");
-	cout<<"================================"<<endl;
-	cout<<"           ANTRIAN PASIEN "<<endl;
-	while(print != NULL){
-		if(print->id == A) {
-			cout<<"================================"<<endl;
-			cout<<"Prioritas        : "<<print->priority<<endl;
-			cout<<"ID Pasien        : "<<print->id<<endl;
-			cout<<"Nama             : "<<print->nama<<endl;
-			cout<<"Jenis Kelamin    : "<<print->jenis_klm<<endl;
-			cout<<"Usia             : "<<print->usia<<endl;
-			cout<<"Golongan Darah   : "<<print->gol_dar<<endl;
-			cout<<"Riwayat Penyakit : "<<print->riwayat<<endl;
-		
-		}
-		
-		print = print->next;
-	}
-	
-	getch();
-}
-
-void UGD::deQueueCadangan() {
-	pasien *hapus = cadangan;
-		
-	cadangan = front->next;
-		
-	delete hapus;
-}
-
-
-bool UGD::isFull(){
-	if(length >= maks){
+bool UGD::isFull(int x, int y){
+	if(x >= y){
 		return true;
 	} else{
 		return false;
@@ -249,7 +420,7 @@ int UGD::decision(int x, int y, int z){
 void UGD::inputManual() {
 	pasien *newNode = new pasien();
 	
-	if(!isFull()){
+	if(!isFull(length, maks)){
 		// hasil decision disimpan di prioritas untuk dibandingkan
 		newNode->cond[0] = pernapasan();
 		newNode->cond[1] = kondisiJantung();
@@ -317,13 +488,12 @@ void UGD::inputManual() {
 void UGD::inputFile(){
 	ifstream file;
 	file.open("data.txt");
-	pasien *newNode = new pasien();
 	
 	if(!file.fail()){
 		do{
-			if(!isFull()){
+			if(!isFull(length, maks)){
+				pasien *newNode = new pasien();
 				file>>newNode->priority;
-				cout<<no;
 				no++;
 				file>>newNode->id;
 				file.ignore();
@@ -355,7 +525,7 @@ void UGD::inputFile(){
 				    	newNode->next = temp->next;
 				    	temp->next = newNode;
 					}
-					else{
+					else{			
 						temp->next = newNode;
 						rear = newNode;
 						rear->next = NULL;
@@ -376,20 +546,20 @@ void UGD::inputFile(){
 
 void UGD::inputMerah(pasien *base){
 	pasien *newNode = new pasien();
-	
-	for(int i = 0; i < 3; i++){
-		newNode->cond[i] = base->cond[i];
-	}
-	
-	newNode->priority = base->priority;
-	newNode->id = base->id;
-	newNode->nama = base->nama;
-	newNode->jenis_klm = base->jenis_klm;
-	newNode->usia = base->usia;
-	newNode->gol_dar = base->gol_dar;
-	newNode->alamat = base->alamat;
-	newNode->riwayat = base->riwayat;
-	newNode->next = NULL;
+	if(!isFull(lengthMerah, maksMerah)){		
+		for(int i = 0; i < 3; i++){
+			newNode->cond[i] = base->cond[i];
+		}
+		
+		newNode->priority = base->priority;
+		newNode->id = base->id;
+		newNode->nama = base->nama;
+		newNode->jenis_klm = base->jenis_klm;
+		newNode->usia = base->usia;
+		newNode->gol_dar = base->gol_dar;
+		newNode->alamat = base->alamat;
+		newNode->riwayat = base->riwayat;
+		newNode->next = NULL;
 	
 		if (merah == NULL){
 			merah= newNode;
@@ -408,24 +578,30 @@ void UGD::inputMerah(pasien *base){
 		    
 			temp->next = newNode;
 		}
+		lengthMerah++;
+	}
+	else{
+		cout<<"Antrian Ruang Merah Penuh";
+		getch();
+	}
 }
 
 void UGD::inputKuning(pasien *base){
 	pasien *newNode = new pasien();
-	
-	for(int i = 0; i < 3; i++){
-		newNode->cond[i] = base->cond[i];
-	}
-	
-	newNode->priority = base->priority;
-	newNode->id = base->id;
-	newNode->nama = base->nama;
-	newNode->jenis_klm = base->jenis_klm;
-	newNode->usia = base->usia;
-	newNode->gol_dar = base->gol_dar;
-	newNode->alamat = base->alamat;
-	newNode->riwayat = base->riwayat;
-	newNode->next = NULL;
+	if(!isFull(lengthKuning, maksKuning)){
+		for(int i = 0; i < 3; i++){
+			newNode->cond[i] = base->cond[i];
+		}
+		
+		newNode->priority = base->priority;
+		newNode->id = base->id;
+		newNode->nama = base->nama;
+		newNode->jenis_klm = base->jenis_klm;
+		newNode->usia = base->usia;
+		newNode->gol_dar = base->gol_dar;
+		newNode->alamat = base->alamat;
+		newNode->riwayat = base->riwayat;
+		newNode->next = NULL;
 	
 		if (kuning == NULL){
 			kuning= newNode;
@@ -443,57 +619,69 @@ void UGD::inputKuning(pasien *base){
 		    
 			temp->next = newNode;
 		}
+		lengthKuning++;
+	}
+	else{
+		cout<<"Antrian Ruang Kuning Penuh";
+		getch();
+	}
 }
 void UGD::inputHijau(pasien *base){
 	pasien *newNode = new pasien();
+	if(!isFull(lengthHijau, maksHijau)){
+		for(int i = 0; i < 3; i++){
+			newNode->cond[i] = base->cond[i];
+		}
+		
+		newNode->priority = base->priority;
+		newNode->id = base->id;
+		newNode->nama = base->nama;
+		newNode->jenis_klm = base->jenis_klm;
+		newNode->usia = base->usia;
+		newNode->gol_dar = base->gol_dar;
+		newNode->alamat = base->alamat;
+		newNode->riwayat = base->riwayat;
+		newNode->next = NULL;
+		if (hijau == NULL){
+			hijau= newNode;
+		}
+		else if(hijau->priority > newNode->priority){
+			newNode->next = hijau;
+			hijau = newNode;
+		}
+		else{
+			pasien *temp = hijau;
 	
-	for(int i = 0; i < 3; i++){
-		newNode->cond[i] = base->cond[i];
-	}
-	
-	newNode->priority = base->priority;
-	newNode->id = base->id;
-	newNode->nama = base->nama;
-	newNode->jenis_klm = base->jenis_klm;
-	newNode->usia = base->usia;
-	newNode->gol_dar = base->gol_dar;
-	newNode->alamat = base->alamat;
-	newNode->riwayat = base->riwayat;
-	newNode->next = NULL;
-	
-	if (hijau == NULL){
-		hijau= newNode;
-	}
-	else if(hijau->priority > newNode->priority){
-		newNode->next = hijau;
-		hijau = newNode;
+		    while (temp->next != NULL && temp->next->priority <= newNode->priority) {
+		        temp = temp->next;
+		    }
+		    
+			temp->next = newNode;
+		}
+		lengthHijau++;
 	}
 	else{
-		pasien *temp = hijau;
-
-	    while (temp->next != NULL && temp->next->priority <= newNode->priority) {
-	        temp = temp->next;
-	    }
-	    
-		temp->next = newNode;
+		cout<<"Antrian Ruang Hijau Penuh";
+		getch();
 	}
 }
 void UGD::inputHitam(pasien *base){
 	pasien *newNode = new pasien();
 	
-	for(int i = 0; i < 3; i++){
-		newNode->cond[i] = base->cond[i];
-	}
-	
-	newNode->priority = base->priority;
-	newNode->id = base->id;
-	newNode->nama = base->nama;
-	newNode->jenis_klm = base->jenis_klm;
-	newNode->usia = base->usia;
-	newNode->gol_dar = base->gol_dar;
-	newNode->alamat = base->alamat;
-	newNode->riwayat = base->riwayat;
-	newNode->next = NULL;
+	if(!isFull(lengthHitam, maksHitam)){
+		for(int i = 0; i < 3; i++){
+			newNode->cond[i] = base->cond[i];
+		}
+		
+		newNode->priority = base->priority;
+		newNode->id = base->id;
+		newNode->nama = base->nama;
+		newNode->jenis_klm = base->jenis_klm;
+		newNode->usia = base->usia;
+		newNode->gol_dar = base->gol_dar;
+		newNode->alamat = base->alamat;
+		newNode->riwayat = base->riwayat;
+		newNode->next = NULL;
 		if (hitam == NULL){
 			hitam= newNode;
 		}
@@ -510,6 +698,12 @@ void UGD::inputHitam(pasien *base){
 		    
 			temp->next = newNode;
 		}
+		lengthHitam++;
+	}
+	else{
+		cout<<"Antrian Ruang Hitam Penuh";
+		getch();
+	}
 }
 
 void UGD::backUpAntrian(pasien *base){
@@ -531,6 +725,8 @@ void UGD::backUpAntrian(pasien *base){
 	
 		if (cadangan == NULL){
 			cadangan= newNode;
+			rearCadangan = newNode;
+			rearCadangan->next = NULL;
 		}
 		else if(cadangan->priority > newNode->priority){
 			newNode->next = cadangan;
@@ -543,7 +739,15 @@ void UGD::backUpAntrian(pasien *base){
 		        temp = temp->next;
 		    }
 		    
-			temp->next = newNode;
+		    if(temp != rearCadangan){
+		    	newNode->next = temp->next;
+		    	temp->next = newNode;
+			}
+			else{
+				temp->next = newNode;
+				rearCadangan = newNode;
+				rearCadangan->next = NULL;
+			}
 		}
 }
 void UGD::cetak(){
